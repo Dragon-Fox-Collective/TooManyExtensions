@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NotALegoClone.Utils;
 
 namespace System.Linq;
 
@@ -89,16 +88,6 @@ public static class EnumerableExtensions
 	}
 	
 	public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey, TValue)> source) where TKey : notnull => source.ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2);
-	
-	public static BidirectionalDictionary<T1, T2> ToBidirectionalDictionary<T1, T2>(this IEnumerable<T1> source, Func<T1, T2> map)
-	where T1 : notnull
-	where T2 : notnull
-	{
-		BidirectionalDictionary<T1, T2> result = new();
-		foreach (T1 item in source)
-			result.Add(item, map(item));
-		return result;
-	}
 	
 	public static bool TryFirst<T>(this IEnumerable<T?> source, out T? item)
 	{

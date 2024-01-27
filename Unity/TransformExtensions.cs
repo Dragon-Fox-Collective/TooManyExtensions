@@ -17,7 +17,7 @@ namespace UnityEngine
 			transform.SetLocalTransforms(other);
 			foreach (Transform child in other)
 				child.SetParent(transform, true);
-			UnityEngine.Object.Destroy(other.gameObject);
+			Object.Destroy(other.gameObject);
 		}
 	}
 }

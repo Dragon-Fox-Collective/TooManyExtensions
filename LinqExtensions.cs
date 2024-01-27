@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 
 namespace System.Linq
@@ -70,11 +71,11 @@ namespace System.Linq
 			}
 		}
 		
-		public static T ElementAtOrLast<T>(this IEnumerable<T> enumerable, int index)
+		public static T? ElementAtOrLast<T>(this IEnumerable<T?> enumerable, int index)
 		{
-			T last = default;
+			T? last = default;
 			int i = 0;
-			foreach (T item in enumerable)
+			foreach (T? item in enumerable)
 			{
 				last = item;
 				if (i == index)
@@ -101,12 +102,12 @@ namespace System.Linq
 		
 		public static (TFirst, TSecond) Zipper<TFirst, TSecond>(TFirst first, TSecond second) => (first, second);
 		
-		public static IEnumerable<(T, T)> ZipOrDefault<T>(this IEnumerable<T> first, IEnumerable<T> second, Func<T> generator) => ZipOrDefault(first, second, generator, generator, Zipper);
-		public static IEnumerable<(TFirst, TSecond)> ZipOrDefault<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second) => ZipOrDefault(first, second, () => default, () => default, Zipper);
-		public static IEnumerable<TResult> ZipOrDefault<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst> firstGenerator, Func<TSecond> secondGenerator, Func<TFirst, TSecond, TResult> zipper)
+		public static IEnumerable<(T?, T?)> ZipOrDefault<T>(this IEnumerable<T> first, IEnumerable<T> second, Func<T> generator) => ZipOrDefault(first, second, generator, generator, Zipper);
+		public static IEnumerable<(TFirst?, TSecond?)> ZipOrDefault<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second) => ZipOrDefault(first, second, () => default, () => default, Zipper);
+		public static IEnumerable<TResult?> ZipOrDefault<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst?> firstGenerator, Func<TSecond?> secondGenerator, Func<TFirst?, TSecond?, TResult> zipper)
 		{
-			using IEnumerator<TFirst> firstEnumerator = first.GetEnumerator();
-			using IEnumerator<TSecond> secondEnumerator = second.GetEnumerator();
+			using IEnumerator<TFirst?> firstEnumerator = first.GetEnumerator();
+			using IEnumerator<TSecond?> secondEnumerator = second.GetEnumerator();
 			
 			bool hasFirst = true;
 			bool hasSecond = true;
@@ -166,7 +167,7 @@ namespace System.Linq
 				yield return source.Skip(i * count).Take(count);
 		}
 		
-		public static bool StartsWith<T>(this IEnumerable<T> source, IEnumerable<T> prefix, IEqualityComparer<T> comparer = null)
+		public static bool StartsWith<T>(this IEnumerable<T> source, IEnumerable<T> prefix, IEqualityComparer<T>? comparer = null)
 		{
 			comparer ??= EqualityComparer<T>.Default;
 			
@@ -184,32 +185,32 @@ namespace System.Linq
 					return false;
 			}
 		}
-		public static bool StartsWith<T>(this IEnumerable<T> source, T prefix, IEqualityComparer<T> comparer = null)
+		public static bool StartsWith<T>(this IEnumerable<T> source, T prefix, IEqualityComparer<T>? comparer = null)
 		{
 			comparer ??= EqualityComparer<T>.Default;
 			using IEnumerator<T> sourceEnumerator = source.GetEnumerator();
 			return sourceEnumerator.MoveNext() && comparer.Equals(sourceEnumerator.Current, prefix);
 		}
 		
-		public static T MinBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, bool orDefault = false)
+		public static T? MinBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, bool orDefault = false)
 		{
 			IComparer<TSelected> comparer = Comparer<TSelected>.Default;
 			return source.AggregateBy(selector, (current, item) => comparer.Compare(item, current) < 0, orDefault: orDefault);
 		}
-		public static T MaxBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, bool orDefault = false)
+		public static T? MaxBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, bool orDefault = false)
 		{
 			IComparer<TSelected> comparer = Comparer<TSelected>.Default;
 			return source.AggregateBy(selector, (current, item) => comparer.Compare(item, current) > 0, orDefault: orDefault);
 		}
-		public static T AggregateBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, Func<TSelected, TSelected, bool> comparer, bool orDefault = false)
+		public static T? AggregateBy<T, TSelected>(this IEnumerable<T> source, Func<T, TSelected> selector, Func<TSelected, TSelected, bool> comparer, bool orDefault = false)
 		{
 			bool initialized = false;
-			T min = default;
-			TSelected minSelected = default;
+			T? min = default;
+			TSelected? minSelected = default;
 			foreach (T item in source)
 			{
 				TSelected itemSelected = selector(item);
-				if (!initialized || comparer(minSelected, itemSelected))
+				if (!initialized || comparer(minSelected!, itemSelected))
 				{
 					min = item;
 					minSelected = itemSelected;

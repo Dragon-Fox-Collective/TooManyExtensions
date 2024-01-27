@@ -1,6 +1,4 @@
 #if TOOLS
-using BoundInputSystem.Actions;
-using BoundInputSystem.Bindings;
 using Godot;
 
 namespace TooManyExtensions;

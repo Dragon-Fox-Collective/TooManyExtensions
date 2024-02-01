@@ -141,14 +141,6 @@ namespace System.Linq
 			}
 		}
 		
-		public static void Shuffle<T>(this IList<T> list)  
-		{
-			for (int n = list.Count - 1; n > 1; n--)
-				list.Swap(n, RandomExtensions.Instance.Next(n + 1));
-		}
-		
-		public static void Swap<T>(this IList<T> list, int i1, int i2) => (list[i1], list[i2]) = (list[i2], list[i1]);
-		
 		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
 			foreach (T t in source)

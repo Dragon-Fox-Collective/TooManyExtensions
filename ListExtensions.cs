@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using UnityEngine;
+﻿using System.Linq;
 
 namespace System.Collections.Generic
 {
@@ -22,24 +20,24 @@ namespace System.Collections.Generic
 			source.Insert(index, item);
 		}
 		
-		public static void Shuffle<T>(this IList<T> source)  
+		public static void Shuffle<T>(this IList<T?> source)
 		{
 			for (int n = 0; n < source.Count; n++)
 				source.Swap(n, RandomExtensions.Instance.Next(source.Count));
 		}
 		
-		public static void Swap<T>(this IList<T> source, int i1, int i2)
+		public static void Swap<T>(this IList<T?> source, int i1, int i2)
 		{
 			if (i1 == i2) return;
 			int maxIndex = Math.Max(i1, i2);
 			int minIndex = Math.Min(i1, i2);
-			source.RemoveAt(maxIndex, out T maxItem);
-			source.RemoveAt(minIndex, out T minItem);
+			source.RemoveAt(maxIndex, out T? maxItem);
+			source.RemoveAt(minIndex, out T? minItem);
 			source.Insert(minIndex, maxItem);
 			source.Insert(maxIndex, minItem);
 		}
 		
-		public static bool RemoveAt<T>(this IList<T> source, int index, [NotNullWhen(true)] out T item)
+		public static bool RemoveAt<T>(this IList<T?> source, int index, out T? item)
 		{
 			if (index < 0 || index >= source.Count)
 			{

@@ -283,8 +283,10 @@ namespace System.Linq
 		public static IEnumerable<(T1, T2)> KeyNotNull<T1, T2>(this IEnumerable<(T1?, T2)> source) => source.Where(item => item.Item1 is not null)!;
 		public static IEnumerable<(T1, T2)> ValueNotNull<T1, T2>(this IEnumerable<(T1, T2?)> source) => source.Where(item => item.Item2 is not null)!;
 		
-		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey, TValue)> source) where TKey : notnull => source.ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2);
+#if !NET8_0_OR_GREATER
+		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey Key, TValue Value)> source) where TKey : notnull => source.ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
 		
+#endif
 		public static bool TryFirst<T>(this IEnumerable<T?> source, out T? item)
 		{
 			foreach (T? sourceItem in source)

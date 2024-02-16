@@ -1,4 +1,5 @@
-﻿namespace System
+﻿#nullable enable
+namespace System
 {
 	public static class MathExtensions
 	{

@@ -1,4 +1,5 @@
-﻿namespace System.Linq
+﻿#nullable enable
+namespace System.Linq
 {
 	public static class ArrayExtensions
 	{

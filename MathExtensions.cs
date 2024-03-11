@@ -9,6 +9,12 @@ namespace System
 		public static double Map(this double value, double inputFrom, double inputTo, double outputFrom, double outputTo) =>
 			(value - inputFrom) / (inputTo - inputFrom) * (outputTo - outputFrom) + outputFrom;
 		
+		public static float Lerp(this float value, float outputFrom, float outputTo) =>
+			(1 - value) * outputFrom + value * outputTo;
+		
+		public static double Lerp(this double value, double outputFrom, double outputTo) =>
+			(1 - value) * outputFrom + value * outputTo;
+		
 		/// <summary>
 		/// Returns positive mod of value
 		/// </summary>

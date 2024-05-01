@@ -50,5 +50,12 @@ namespace System.Collections.Generic
 			source.RemoveAt(index);
 			return true;
 		}
+		
+		public static bool AddIfDistinct<T>(this IList<T> source, T item)
+		{
+			if (source.Contains(item)) return false;
+			source.Add(item);
+			return true;
+		}
 	}
 }

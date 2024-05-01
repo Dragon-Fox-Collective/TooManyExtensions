@@ -226,28 +226,28 @@ namespace System.Linq
 			where TOther : notnull
 		{
 			List<TSource?> sourceList = source.ToList();
-			if (!sourceList.NotNull().IsDistinct())
+			if (!sourceList.WhereNotNull().IsDistinct())
 				throw new InvalidOperationException("Source list contained duplicate items.");
 			
 			List<TOther?> otherList = other.ToList();
-			if (!otherList.NotNull().IsDistinct())
+			if (!otherList.WhereNotNull().IsDistinct())
 				throw new InvalidOperationException("Other list contained duplicate items.");
 			
-			Dictionary<TSource, TOther> mapDict = sourceList.NotNull().Pair(map).ValueNotNull().ToDictionary();
+			Dictionary<TSource, TOther> mapDict = sourceList.WhereNotNull().Pair(map).WhereValueNotNull().ToDictionary();
 			
-			sourceList.NotNull().Where(sourceItem => !mapDict.ContainsKey(sourceItem)).ForEach(sourceItem =>
+			sourceList.WhereNotNull().Where(sourceItem => !mapDict.ContainsKey(sourceItem)).ForEach(sourceItem =>
 			{
 				TOther otherItem = add(sourceItem);
 				otherList.Add(otherItem);
 				mapDict.Add(sourceItem, otherItem);
 			});
-			otherList.NotNull().Where(otherItem => !mapDict.ContainsValue(otherItem)).ToList().ForEach(otherItem =>
+			otherList.WhereNotNull().Where(otherItem => !mapDict.ContainsValue(otherItem)).ToList().ForEach(otherItem =>
 			{
 				remove(otherItem);
 				otherList.Remove(otherItem);
 			});
 			
-			if (sourceList.NotNull().Count() != otherList.NotNull().Count())
+			if (sourceList.WhereNotNull().Count() != otherList.WhereNotNull().Count())
 				throw new Exception($"Source and other lists were not the same length once items were added/removed.\n{sourceList.ToDelimString()} vs {otherList.ToDelimString()} with mapDict {mapDict.ToDelimString()}");
 			
 			for (int sourceIndex = 0, otherIndex = 0; sourceIndex < sourceList.Count; sourceIndex++, otherIndex++)
@@ -266,7 +266,7 @@ namespace System.Linq
 		
 		private static bool NextNonNullItem<T>(this IEnumerable<T?> source, ref int index, out T item)
 		{
-			if (source.Skip(index).Enumerate().ValueNotNull().TryFirst(out (int Index, T Item) enumeration))
+			if (source.Skip(index).Enumerate().WhereValueNotNull().TryFirst(out (int Index, T Item) enumeration))
 			{
 				index += enumeration.Index;
 				item = enumeration.Item;
@@ -279,9 +279,9 @@ namespace System.Linq
 			}
 		}
 		
-		public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> source) => source.Where(item => item is not null)!;
-		public static IEnumerable<(T1, T2)> KeyNotNull<T1, T2>(this IEnumerable<(T1?, T2)> source) => source.Where(item => item.Item1 is not null)!;
-		public static IEnumerable<(T1, T2)> ValueNotNull<T1, T2>(this IEnumerable<(T1, T2?)> source) => source.Where(item => item.Item2 is not null)!;
+		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source) => source.Where(item => item is not null)!;
+		public static IEnumerable<(T1, T2)> WhereKeyNotNull<T1, T2>(this IEnumerable<(T1?, T2)> source) => source.Where(item => item.Item1 is not null)!;
+		public static IEnumerable<(T1, T2)> WhereValueNotNull<T1, T2>(this IEnumerable<(T1, T2?)> source) => source.Where(item => item.Item2 is not null)!;
 		
 #if !NET8_0_OR_GREATER
 		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey Key, TValue Value)> source) where TKey : notnull => source.ToDictionary(tuple => tuple.Key, tuple => tuple.Value);

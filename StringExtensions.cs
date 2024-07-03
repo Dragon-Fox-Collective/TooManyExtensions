@@ -1,5 +1,7 @@
 ﻿#nullable enable
-namespace TooManyExtensions;
+using System.Collections.Generic;
+
+namespace System;
 
 public static class StringExtensions
 {
@@ -18,5 +20,10 @@ public static class StringExtensions
 	public static bool IsEmpty(this string? str)
 	{
 		return string.IsNullOrEmpty(str);
+	}
+	
+	public static string Indent(this string str)
+	{
+		return str.Split("\n").Join("\n\t");
 	}
 }

@@ -6,6 +6,7 @@ namespace System.Collections.Generic
 	public static class EnumerableExtensions
 	{
 		public static string Join<T>(this IEnumerable<T> source, string delimiter) => string.Join(delimiter, source);
+		public static string Join(this IEnumerable<string> source) => string.Join("", source);
 		public static string ToDelimString<T>(this IEnumerable<T> source) => "[" + source.Join(", ") +  "]";
 		public static bool IsEmpty<T>(this IEnumerable<T> source) => !source.Any();
 	}

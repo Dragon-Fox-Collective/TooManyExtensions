@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace System.Collections.Generic
@@ -10,6 +11,18 @@ namespace System.Collections.Generic
 			T obj = source[0];
 			source.RemoveAt(0);
 			return obj;
+		}
+		
+		public static bool TryPop<T>(this IList<T> source, [NotNullWhen(true)] out T? obj)
+		{
+			if (source.Count == 0)
+			{
+				obj = default;
+				return false;
+			}
+			
+			obj = source.Pop()!;
+			return true;
 		}
 		
 		public static T RandomElement<T>(this IList<T> source) => RandomExtensions.Instance.Choose(source);

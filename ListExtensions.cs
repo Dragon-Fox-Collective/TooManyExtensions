@@ -26,6 +26,7 @@ namespace System.Collections.Generic
 		}
 		
 		public static T RandomElement<T>(this IList<T> source) => RandomExtensions.Instance.Choose(source);
+		public static void AddRange<T>(this IList<T> source, IEnumerable<T> items) => items.ForEach(source.Add);
 		public static void AddRange<T>(this IList<T> source, int count, Func<T> factory) => Enumerable.Range(0, count).Select(_ => factory()).ForEach(source.Add);
 		
 		public static void Move<T>(this IList<T> source, T item, int index)

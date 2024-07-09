@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using System.Linq;
 
 namespace System;
 
@@ -22,8 +23,8 @@ public static class StringExtensions
 		return string.IsNullOrEmpty(str);
 	}
 	
-	public static string Indent(this string str)
+	public static string Indent(this string str, int levels = 1)
 	{
-		return str.Split("\n").Join("\n\t");
+		return str.Split("\n").Join("\n" + Enumerable.Repeat("\t", levels).Join());
 	}
 }

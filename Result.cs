@@ -33,6 +33,7 @@ namespace TooManyExtensions
 		}
 	
 		public static TOk Expect<TOk, TErr>(this Result<TOk, TErr> result, string message) => result.TryOk(out TOk? ok, out TErr? _) ? ok : throw new InvalidOperationException(message);
+		public static TOk Unwrap<TOk, TErr>(this Result<TOk, TErr> result) => result.TryOk(out TOk? ok, out TErr? err) ? ok : err is Exception e ? throw e : throw new Exception(err.ToString());
 		public static TOk UnwrapOr<TOk, TErr>(this Result<TOk, TErr> result, TOk defaultValue) => result.TryOk(out TOk? ok, out TErr? _) ? ok : defaultValue;
 		public static TOk UnwrapOrDefault<TOk, TErr>(this Result<TOk, TErr> result) => result.TryOk(out TOk? ok, out TErr? _) ? ok : default!;
 		public static TOk UnwrapOrElse<TOk, TErr>(this Result<TOk, TErr> result, Func<TErr, TOk> func) => result.TryOk(out TOk? ok, out TErr? err) ? ok : func(err);

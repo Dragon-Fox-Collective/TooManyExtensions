@@ -1,5 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using TooManyExtensions;
 
 namespace System.Linq
 {
@@ -287,11 +289,11 @@ namespace System.Linq
 		public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey Key, TValue Value)> source) where TKey : notnull => source.ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
 		
 #endif
-		public static bool TryFirst<T>(this IEnumerable<T?> source, out T? item)
+		public static bool TryFirst<T>(this IEnumerable<T> source, [NotNullWhen(true)] out T? item)
 		{
-			foreach (T? sourceItem in source)
+			foreach (T sourceItem in source)
 			{
-				item = sourceItem;
+				item = sourceItem!;
 				return true;
 			}
 			
@@ -299,13 +301,13 @@ namespace System.Linq
 			return false;
 		}
 		
-		public static bool TryFirst<T>(this IEnumerable<T?> source, Predicate<T?> predicate, out T? item)
+		public static bool TryFirst<T>(this IEnumerable<T> source, Predicate<T> predicate, [NotNullWhen(true)] out T? item)
 		{
-			foreach (T? sourceItem in source)
+			foreach (T sourceItem in source)
 			{
 				if (predicate(sourceItem))
 				{
-					item = sourceItem;
+					item = sourceItem!;
 					return true;
 				}
 			}
@@ -313,6 +315,8 @@ namespace System.Linq
 			item = default;
 			return false;
 		}
+		
+		public static Result<T, TErr> First<T, TErr>(this IEnumerable<T> source, Predicate<T> predicate, TErr err) => source.TryFirst(predicate, out T? result) ? Result.Ok<T, TErr>(result) : Result.Err<T, TErr>(err);
 		
 		public static bool IsDistinct<T>(this IEnumerable<T> source)
 		{

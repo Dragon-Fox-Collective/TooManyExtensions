@@ -15,6 +15,12 @@ namespace System
 		public static double Lerp(this double value, double outputFrom, double outputTo) =>
 			(1 - value) * outputFrom + value * outputTo;
 		
+		public static float Clamped(this float value, float min = 0.0f, float max = 1.0f) =>
+			Math.Clamp(value, min, max);
+		
+		public static double Clamped(this double value, double min = 0.0, double max = 1.0) =>
+			Math.Clamp(value, min, max);
+		
 		/// <summary>
 		/// Returns positive mod of value
 		/// </summary>

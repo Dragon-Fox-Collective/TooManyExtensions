@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace System;
@@ -18,7 +19,7 @@ public static class StringExtensions
 		return index == -1 ? (string.Empty, str) : (str[..index], str[(index + 1)..]);
 	}
 	
-	public static bool IsEmpty(this string? str)
+	public static bool IsEmpty([NotNullWhen(false)] this string? str)
 	{
 		return string.IsNullOrEmpty(str);
 	}

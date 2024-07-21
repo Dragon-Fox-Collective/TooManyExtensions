@@ -301,7 +301,7 @@ namespace System.Linq
 			return false;
 		}
 		
-		public static bool TryFirst<T>(this IEnumerable<T> source, Predicate<T> predicate, [NotNullWhen(true)] out T? item)
+		public static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate, [NotNullWhen(true)] out T? item)
 		{
 			foreach (T sourceItem in source)
 			{
@@ -316,7 +316,7 @@ namespace System.Linq
 			return false;
 		}
 		
-		public static Result<T, TErr> First<T, TErr>(this IEnumerable<T> source, Predicate<T> predicate, TErr err) => source.TryFirst(predicate, out T? result) ? Result.Ok<T, TErr>(result) : Result.Err<T, TErr>(err);
+		public static Result<T, TErr> First<T, TErr>(this IEnumerable<T> source, Func<T, bool> predicate, TErr err) => source.TryFirst(predicate, out T? result) ? Result.Ok<T, TErr>(result) : Result.Err<T, TErr>(err);
 		
 		public static bool IsDistinct<T>(this IEnumerable<T> source)
 		{

@@ -7,8 +7,13 @@ namespace System.Collections.Generic
 	{
 		public static string Join<T>(this IEnumerable<T> source, string delimiter) => string.Join(delimiter, source);
 		public static string Join(this IEnumerable<string> source) => string.Join("", source);
+		
 		public static string ToDelimString<T>(this IEnumerable<T> source) => "[" + source.Join(", ") +  "]";
+		
 		public static bool IsEmpty<T>(this IEnumerable<T> source) => !source.Any();
+		
+		public static IEnumerable<T> Without<T>(this IEnumerable<T> source, T obj, IEqualityComparer<T> comparer) => source.Where(item => !comparer.Equals(item, obj));
+		public static IEnumerable<T> Without<T>(this IEnumerable<T> source, T obj) => source.Without(obj, EqualityComparer<T>.Default);
 	}
 	
 	public static class EnumerableOf

@@ -9,7 +9,7 @@ namespace TooManyExtensions
 	public static class Option
 	{
 		public static Option<T> Some<T>(T value) => new(true, value);
-		public static Option<T> None<T>() => new(false, default);
+		public static Option<T> None<T>() => new(false, default!);
 		
 		public static T Expect<T>(this Option<T> option, string message) => option.TrySome(out T? some) ? some : throw new InvalidOperationException(message);
 		public static T UnwrapOr<T>(this Option<T> option, T defaultValue) => option.TrySome(out T? some) ? some : defaultValue;
@@ -41,14 +41,23 @@ namespace TooManyExtensions
 	
 	}
 
-	public class Option<T>(bool hasValue, T? value)
+	public class Option<T>
 	{
-		public bool IsSome => hasValue;
-		public bool IsNone => !hasValue;
+		public bool IsSome { get; private set; }
+		public bool IsNone { get; private set; }
+		
+		private T value;
+		
+		public Option(bool hasValue, T value)
+		{
+			IsSome = hasValue;
+			IsNone = !hasValue;
+			this.value = value;
+		}
 		
 		public bool TrySome([NotNullWhen(true)] out T? outValue)
 		{
-			if (hasValue)
+			if (IsSome)
 			{
 				outValue = value!;
 				return true;
@@ -58,7 +67,7 @@ namespace TooManyExtensions
 		}
 		public bool TryNone([NotNullWhen(false)] out T? outValue)
 		{
-			if (hasValue)
+			if (IsSome)
 			{
 				outValue = value!;
 				return false;

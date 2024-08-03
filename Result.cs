@@ -49,14 +49,25 @@ namespace TooManyExtensions
 		public static Result<TOk, TErr> Flatten<TOk, TErr>(this Result<Result<TOk, TErr>, TErr> result) => result.TryOk(out Result<TOk, TErr>? ok, out TErr? err) ? ok : Err<TOk, TErr>(err);
 	}
 
-	public class Result<TOk, TErr>(bool isOk, TOk okValue, TErr errValue)
+	public class Result<TOk, TErr>
 	{
-		public bool IsOk => isOk;
-		public bool IsErr => !isOk;
-	
+		public bool IsOk { get; private set; }
+		public bool IsErr { get; private set; }
+		
+		private TOk okValue;
+		private TErr errValue;
+		
+		public Result(bool isOk, TOk okValue, TErr errValue)
+		{
+			IsOk = isOk;
+			IsErr = !isOk;
+			this.okValue = okValue;
+			this.errValue = errValue;
+		}
+		
 		public bool TryOk([NotNullWhen(true)] out TOk? outValue, [NotNullWhen(false)] out TErr? outError)
 		{
-			if (isOk)
+			if (IsOk)
 			{
 				outValue = okValue!;
 				outError = default!;
@@ -68,7 +79,7 @@ namespace TooManyExtensions
 		}
 		public bool TryErr([NotNullWhen(false)] out TOk? outValue, [NotNullWhen(true)] out TErr? outError)
 		{
-			if (isOk)
+			if (IsOk)
 			{
 				outValue = okValue!;
 				outError = default!;

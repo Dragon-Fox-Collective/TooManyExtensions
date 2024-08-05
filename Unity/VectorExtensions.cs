@@ -76,6 +76,7 @@ namespace UnityEngine
 		
 		public static Vector3 WithMagnitude(this Vector3 vector, float magnitude) => vector.normalized * magnitude;
 		public static Vector3 ClampMagnitude(this Vector3 vector, float maxLength) => vector.magnitude > maxLength ? vector.normalized * maxLength : vector;
+		public static Vector3 WithMagnitudeRelativeTo(this Vector3 vector, Vector3 relativeVector, float magnitude) => (vector - relativeVector).WithMagnitude(magnitude) + relativeVector;
 	}
 }
 #endif

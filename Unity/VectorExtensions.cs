@@ -73,6 +73,9 @@ namespace UnityEngine
 			new Vector4(0, 0, 0, 1));
 		
 		public static float InnerSquared(this Vector3 a) => Vector3.Dot(a, a);
+		
+		public static Vector3 WithMagnitude(this Vector3 vector, float magnitude) => vector.normalized * magnitude;
+		public static Vector3 ClampMagnitude(this Vector3 vector, float maxLength) => vector.magnitude > maxLength ? vector.normalized * maxLength : vector;
 	}
 }
 #endif
